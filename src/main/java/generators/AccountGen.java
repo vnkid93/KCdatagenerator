@@ -1,4 +1,4 @@
-package webadmin;
+package generators;
 
 import com.kerio.lib.json.api.connect.admin.iface.Users;
 import com.kerio.lib.json.api.connect.admin.struct.User;
@@ -7,12 +7,12 @@ import com.kerio.lib.json.api.connect.admin.struct.common.SearchQuery;
 import bridge.KCBridge;
 
 
-public class Account {
+public class AccountGen {
 	private KCBridge kcBridge;
 	private Users uClass;
 	
 	
-	public Account(KCBridge bridge){
+	public AccountGen(KCBridge bridge){
 		this.kcBridge = bridge;
 		uClass = kcBridge.getApi(Users.class);
 	}

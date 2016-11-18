@@ -3,7 +3,7 @@ package bridge;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import generators.CalendarGen;
+import generators.EventGen;
 import generators.ContactGen;
 import generators.MailGen;
 import microsoft.exchange.webservices.data.core.ExchangeService;
@@ -27,7 +27,7 @@ public class EwsBridge {
 	private ExchangeCredentials credentials;
 	private MailGen email;
 	private ContactGen contacts;
-	private CalendarGen calendar;
+	private EventGen calendar;
 	private String host;
 	
 
@@ -118,7 +118,7 @@ public class EwsBridge {
 	public ContactGen getContacts() {
 		return contacts;
 	}
-	public CalendarGen getCalendar() {
+	public EventGen getCalendar() {
 		return calendar;
 	}
 	public String getHost() {

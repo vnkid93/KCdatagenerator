@@ -1,13 +1,10 @@
 package generators;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import bridge.EwsBridge;
 import engine.TimeInput;
-import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
 import microsoft.exchange.webservices.data.core.enumeration.service.TaskStatus;
 import microsoft.exchange.webservices.data.core.service.item.Item;
@@ -17,16 +14,14 @@ import microsoft.exchange.webservices.data.property.complex.MessageBody;
 import microsoft.exchange.webservices.data.search.FindItemsResults;
 import microsoft.exchange.webservices.data.search.ItemView;
 
-public class TaskGen {
+public class TaskGen extends BasicItemGenerator{
 	// subject, due day, reminder, description, status (done/not done)
+
 	
-	private EwsBridge bridge;
-	private ExchangeService service;
-	
-	public TaskGen(EwsBridge bridge){
-		this.bridge = bridge;
-		service = bridge.getService();
+	public TaskGen(EwsBridge bridge) {
+		super(bridge);
 	}
+	
 	
 	public void createTask(String subject, String body, boolean completed, TimeInput dueDate, TimeInput reminderDate){
 		try {
@@ -75,8 +70,8 @@ public class TaskGen {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Method that return all tasks that are presented in mian Task folder.
+	 * @return list of tasks found.
 	 */
 	public ArrayList<Task> getTasks(){
 		ArrayList<Task> taskList = new ArrayList<Task>();

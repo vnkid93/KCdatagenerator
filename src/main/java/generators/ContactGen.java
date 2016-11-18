@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import bridge.EwsBridge;
-import main.Constants;
+import engine.Constants;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.property.ImAddressKey;
 import microsoft.exchange.webservices.data.core.enumeration.property.MapiPropertyType;

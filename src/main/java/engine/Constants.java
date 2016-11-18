@@ -1,4 +1,4 @@
-package main;
+package engine;
 
 import microsoft.exchange.webservices.data.core.enumeration.property.EmailAddressKey;
 import microsoft.exchange.webservices.data.core.enumeration.property.PhoneNumberKey;
@@ -29,7 +29,11 @@ public class Constants {
 															PhysicalAddressKey.Other};
 	
 	
-	public static final String DEFAULT_TIME_FORMAT = "dd/M/yyyy";
+	public static final String DEFAULT_TIME_FORMAT = "d/M/yyyy";
+	
+	/* EVENTS */
+	public static final int EVENT_DURATION_START_INDEX = 0;
+	public static final int EVENT_DURATION_END_INDEX = 0;
 	
 	
 }

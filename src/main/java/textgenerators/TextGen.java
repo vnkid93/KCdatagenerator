@@ -1,19 +1,16 @@
-package generators;
+package textgenerators;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Random;
 
 import de.svenjacobs.loremipsum.LoremIpsum;
-import engine.ELocale;
 
-public class TextGen {
+public class TextGen extends ITextGenerator{
 	private static final int NAME_COUNT = 100;
 	private LoremIpsum loremIpsum;
 	private static TextGen instance = null;
-	private Random rand;
 	
 	private final String[] cs_firstNames = new String[NAME_COUNT];
 	private final String[] cs_lastNames = new String[NAME_COUNT];
@@ -24,9 +21,8 @@ public class TextGen {
 	private String textBook;
 	private int textBookLength;
 	
-	private TextGen(){
-		loremIpsum = new LoremIpsum();
-		rand = new Random();
+	public TextGen(){
+		super();
 		fillNames(cs_firstNames, "src/main/resources/cs_firstname.txt");
 		fillNames(cs_lastNames, "src/main/resources/cs_lastname.txt");
 		fillNames(us_firstNames, "src/main/resources/us_firstname.txt");
@@ -106,24 +102,19 @@ public class TextGen {
 	
 	public String genSentence(boolean nationalChar, int numOfSentences){
 		StringBuilder str = new StringBuilder();
-		int lastIndexOfDot = textBook.lastIndexOf('.');
+		int preLastIndex = textBook.lastIndexOf('.', textBookLength-2);
 		for (int i = 0; i < numOfSentences; i++) {
-			int seek = rand.nextInt(textBookLength);
-			do{
-				seek = textBook.indexOf('.', seek);
-			}while(seek == lastIndexOfDot);
-			
+			int seek = textBook.indexOf('.', rand.nextInt(preLastIndex));
 			str.append(textBook.substring(seek+2, textBook.indexOf('.', seek+1)));
 			str.append(". ");
 		}
 		return str.toString().trim();
 	}
 	
-	
-	
 	public String genTelNumber(){
-		int num = (int)(rand.nextFloat() * 1000000000);
-		if(num < 100000000) num += 100000000;
+		final int CONST = 100000000;
+		int num = (int)(rand.nextFloat() * (10 * CONST));
+		if(num < CONST) num += CONST;
 		return "+420"+num;
 	}
 	
@@ -157,6 +148,24 @@ public class TextGen {
 	
 	public String genPassword(boolean complex){
 		return complex ? "ABCabc132" : "a";
+	}
+
+
+	@Override
+	public String genLoginName() {
+		
+		return "FIX_THIS";
+	}
+	
+	@Override
+	public String genSubject(boolean nationalChar) {
+		return genSentence(nationalChar, 1);
+	}
+
+	@Override
+	public String genShortContent(boolean nationalChar) {
+		// TODO Auto-generated method stub
+		return genParagraph(nationalChar, rand.nextInt(3)+1);
 	}
 	
 	
