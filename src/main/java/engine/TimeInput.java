@@ -6,6 +6,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import org.joda.time.DateTime;
+
 public class TimeInput {
 	// instance of date
 	private Date date;
@@ -15,7 +17,7 @@ public class TimeInput {
 	}
 
 	public TimeInput(int day, int month, int year, int hour, int minute) {
-		this("d/M/yyyy h:m", day + "/" + month + "/" + year + " " + hour + ":" + minute);
+		this("d/M/yyyy HH:mm", day + "/" + month + "/" + year + " " + hour + ":" + minute);
 	}
 
 	/**
@@ -70,19 +72,28 @@ public class TimeInput {
 	}
 
 	public static Date getRandomDayAfter(Date dayBefore, int maxDayAfter) {
-		long startingTime = dayBefore.getTime();
-		long range = maxDayAfter * (24 * 60 * 60 * 1000);
-		long randomTime = startingTime + (new Random().nextLong() % range);
-		randomTime += startingTime; 
-		return new Date(randomTime);
+		return getDayAfter(dayBefore, Probability.getInstance().getRadom().nextInt(maxDayAfter)+1);
 	}
 
 	public static Date getRandomDayBefore(Date dayAfter, int maxDayBefore) {
-		long endingTime = dayAfter.getTime();
-		long range = maxDayBefore * (24 * 60 * 60 * 1000);
-		long startingTime = endingTime - range;
-		long randomTime = startingTime + (new Random().nextLong() % range);
-		randomTime += startingTime; 
-		return new Date(randomTime);
+		return getDayAfter(dayAfter, -(Probability.getInstance().getRadom().nextInt(maxDayBefore)+1));
+	}
+	
+	/**
+	 * Also works for get day before if parameter dayAfter is negative
+	 * @param actualDate
+	 * @param dayAfter
+	 * @return
+	 */
+	public static Date getDayAfter(Date actualDate, int dayAfter) {
+		DateTime actual = new DateTime(actualDate);
+		actual = actual.plusDays(dayAfter);
+		return actual.toDate();
+	}
+	
+	public static Date getMonthAfter(Date actualDate, int monthAfter) {
+		DateTime actual = new DateTime(actualDate);
+		actual = actual.plusMonths(monthAfter);
+		return actual.toDate();
 	}
 }

@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 import bridge.EwsBridge;
 import engine.Constants;
+import engine.Probability;
 import microsoft.exchange.webservices.data.core.ExchangeService;
+import microsoft.exchange.webservices.data.core.enumeration.property.BodyType;
 import microsoft.exchange.webservices.data.core.enumeration.property.ImAddressKey;
 import microsoft.exchange.webservices.data.core.enumeration.property.MapiPropertyType;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
@@ -22,95 +24,73 @@ import microsoft.exchange.webservices.data.property.complex.PhysicalAddressEntry
 import microsoft.exchange.webservices.data.property.definition.ExtendedPropertyDefinition;
 import microsoft.exchange.webservices.data.search.FindItemsResults;
 import microsoft.exchange.webservices.data.search.ItemView;
+import textgenerators.TextGen;
 
-public class ContactGen {
+public class ContactGen extends BasicItemGenerator{
 	
-	private EwsBridge bridge;
-	private ExchangeService service;
+	
 	
 	public ContactGen(EwsBridge bridge){
-		this.bridge = bridge;
-		this.service = bridge.getService();
+		super(bridge);
 	}
 	
-	/**
-	 * Create contact will full information. Of course every single information can be skipped by assigning null or empty string
-	 * @param name The contact name
-	 * @param surname The contact surname
-	 * @param middleName The contact middleName
-	 * @param nickName The nickName of contact
-	 * @param title The title that stand in before the name
-	 * @param generation The title that stand after name
-	 * @param company Company name
-	 * @param emails List of email addresses, it is a array of string. For e.g {"email1@email.com", "email2@email.com"}. Only three email addresses are allowed.
-	 * @param jobTitle The job title or profession
-	 * @param homepage The contact website
-	 * @param phoneNumbers Phone and fax numbers of contact. Same as email addresses, it is a array of string. Maximum 5 numbers
-	 * @param description The short description about contact
-	 * @param imAddress IM address. For IM.
-	 * @param addresses Maximum three address entry. It is a array of {@code PhysicalAddressEntry}. Address of the contact.
-	 * @param assistantName Name of an assistant
-	 * @param managerName The managers name
-	 * @param birthday Contact birthday written due format in {@code datePattern} parameter
-	 * @param anniversaryDate Same as birthday, it will have same format
-	 * @param department The contact department
-	 * @param officeLocation The location of an office
-	 * @param datePattern The date pattern. E.g. "dd-MM-yyyy hh:mm"
-	 */
-	public void createContact(String name, String surname, String middleName, String nickName, String title, String generation,	
-			String company, String[] emails, String jobTitle, String homepage, String[] phoneNumbers,
-			String description, String imAddress, PhysicalAddressEntry[] addresses,
-			String assistantName, String managerName, String birthday, String anniversaryDate, 
-			String department, String officeLocation, String datePattern){
+	
+	public void createContact(boolean nationalChar){
 		try {
 			Contact contact = new Contact(service);
-			if(name != null)		contact.setGivenName(name);
-			if(middleName != null)	contact.setMiddleName(middleName);
-			if(surname != null)		contact.setSurname(surname);
-			if(company != null)		contact.setCompanyName(company);
+			TextGen tGen = TextGen.getInstance();
+			tGen.setNationalChar(nationalChar);
 			
-			if(description != null)		contact.setBody(new MessageBody(description));
-			if(assistantName != null)	contact.setAssistantName(assistantName);
-			if(managerName != null)		contact.setManager(managerName);
-			if(homepage != null)		contact.setBusinessHomePage(homepage);
-			if(jobTitle != null)		contact.setJobTitle(jobTitle);
-			if(datePattern != null){				
-				DateFormat formatter = new SimpleDateFormat(datePattern);
-				if(birthday != null)		contact.setBirthday(formatter.parse(birthday));
-				if(anniversaryDate != null)	contact.setWeddingAnniversary(formatter.parse(anniversaryDate));
-			}
-			if(name != null)		contact.setNickName(nickName);
+			contact.setGivenName(tGen.genFirstName());
+			contact.setSurname(tGen.genLastName());
+			contact.setCompanyName(tGen.genCompany());
 			
-			if(emails != null && emails.length > 0){		
-				EmailAddressDictionary emailDict = contact.getEmailAddresses();
-				for (int i = 0; i < Constants.EMAIL_INDEXES.length; i++) {
-					if(emails[i] != null)	emailDict.setEmailAddress(Constants.EMAIL_INDEXES[i], new EmailAddress(emails[i]));
-				}
+			
+			if(Probability.getInstance().tryLuck(5))	contact.setMiddleName(tGen.genMiddleName());
+			
+			if(Probability.getInstance().tryLuck(5)){
+				contact.setGeneration(new String[]{"Junior", "Senior"}[rand.nextInt(2)]);
 			}
 			
-			if(phoneNumbers != null && phoneNumbers.length > 0 && phoneNumbers.length <= Constants.PHONE_INDEXES.length){		
-				PhoneNumberDictionary phoneDict = contact.getPhoneNumbers();
-				for (int i = 0; i < phoneNumbers.length; i++) {
-					if(phoneNumbers[i] != null)	phoneDict.setPhoneNumber(Constants.PHONE_INDEXES[i], phoneNumbers[i]);
-				}
+			contact.setBody(new MessageBody(BodyType.Text, tGen.genSentence(3)));
+			
+			contact.setAssistantName(tGen.genFullName());
+			
+			
+			contact.setManager(tGen.genFullName());
+			contact.setBusinessHomePage(tGen.genWebsite());
+			contact.setJobTitle(tGen.genJobTitle());		
+			contact.setBirthday(tGen.genBirthDay());
+			contact.setWeddingAnniversary(tGen.genAnniversary());
+			contact.setNickName(tGen.genNickName());
+					
+			EmailAddressDictionary emailDict = contact.getEmailAddresses();
+			for (int i = 0; i < Constants.EMAIL_INDEXES.length; i++) {
+				emailDict.setEmailAddress(Constants.EMAIL_INDEXES[i], new EmailAddress(tGen.genEmail(contact.getGivenName(), contact.getSurname())));
+			}
+					
+			PhoneNumberDictionary phoneDict = contact.getPhoneNumbers();
+			for (int i = 0; i < Constants.PHONE_INDEXES.length; i++) {
+				phoneDict.setPhoneNumber(Constants.PHONE_INDEXES[i], tGen.genTelNumber());
 			}
 			
-			if(imAddress != null)		contact.getImAddresses().setImAddressKey(ImAddressKey.ImAddress1, imAddress);
+			contact.getImAddresses().setImAddressKey(ImAddressKey.ImAddress1, tGen.genEmail(contact.getGivenName(), contact.getSurname()));
 
-			if(addresses != null && addresses.length > 0 && addresses.length <= Constants.ADDRESS_INDEXES.length){		
-				PhysicalAddressDictionary addressDict = contact.getPhysicalAddresses();
-				for (int i = 0; i < addresses.length; i++) {
-					if(addresses[i] != null)	addressDict.setPhysicalAddress(Constants.ADDRESS_INDEXES[i], addresses[i]);
-				}
-			}
-			if(department != null)		contact.setDepartment(department);
-			if(generation != null)		contact.setGeneration(generation);
-			if(officeLocation != null)		contact.setOfficeLocation(officeLocation);
+//			if(addresses != null && addresses.length > 0 && addresses.length <= Constants.ADDRESS_INDEXES.length){		
+//				PhysicalAddressDictionary addressDict = contact.getPhysicalAddresses();
+//				for (int i = 0; i < addresses.length; i++) {
+//					if(addresses[i] != null)	addressDict.setPhysicalAddress(Constants.ADDRESS_INDEXES[i], addresses[i]);
+//				}
+//			}
 			
-			if(title != null) {				
-				ExtendedPropertyDefinition titlePropDef = new ExtendedPropertyDefinition(0x3A45, MapiPropertyType.String);
-				contact.setExtendedProperty(titlePropDef, title);
-			}
+			
+			
+			contact.setDepartment("Department");
+			contact.setOfficeLocation(tGen.genLocation());
+						
+//			ExtendedPropertyDefinition titlePropDef = new ExtendedPropertyDefinition(0x3A45, MapiPropertyType.String);
+//			contact.setExtendedProperty(titlePropDef, title);
+			
 			
 			//TODO validate params
 			//contact.getPhysicalAddresses().setPhysicalAddress(PhysicalAddressKey.Home, address);
@@ -119,6 +99,7 @@ public class ContactGen {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	public ArrayList<Contact> getContacts(FolderId folderId){
 		ArrayList<Contact> contactList = new ArrayList<Contact>();

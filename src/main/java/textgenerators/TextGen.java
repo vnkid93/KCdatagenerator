@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.Normalizer;
+import java.util.Date;
+
+import org.joda.time.DateTime;
 
 import de.svenjacobs.loremipsum.LoremIpsum;
 
@@ -17,11 +21,14 @@ public class TextGen extends ITextGenerator{
 	private final String[] us_firstNames = new String[NAME_COUNT];
 	private final String[] us_lastNames = new String[NAME_COUNT];
 	
+	private static final String[] CZ_CITIES = {"Plzeň", "České Budějovice", "Mariánské Lázně", "Hradec Králové", "Telč", "Litoměřice", "Děčín", "Ústí nad Labem"};
+	private static final String[] OTHER_CITIES = {"New York", "Los Angeles", "Praha", "Hanoi", "Chicago", "London", "Brno", "Saigon"};
+	
 
 	private String textBook;
 	private int textBookLength;
 	
-	public TextGen(){
+	private TextGen(){
 		super();
 		fillNames(cs_firstNames, "src/main/resources/cs_firstname.txt");
 		fillNames(cs_lastNames, "src/main/resources/cs_lastname.txt");
@@ -29,6 +36,8 @@ public class TextGen extends ITextGenerator{
 		fillNames(us_lastNames, "src/main/resources/us_lastname.txt");
 		fillText();
 	}
+	
+	
 	
 	
 	private void fillNames(String[] nameArr, String filePath){
@@ -81,11 +90,11 @@ public class TextGen extends ITextGenerator{
 	}
 	
 	
-	public String genWords(boolean nationalChar, int numOfWords){
+	public String genWords(int numOfWords){
 		return loremIpsum.getWords(numOfWords);
 	}
 	
-	public String genParagraph(boolean nationalChar, int numOfPar){
+	public String genParagraph(int numOfPar){
 		final int parSize = 1000;
 		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < numOfPar; i++) {
@@ -100,7 +109,7 @@ public class TextGen extends ITextGenerator{
 		return str.toString();
 	}
 	
-	public String genSentence(boolean nationalChar, int numOfSentences){
+	public String genSentence(int numOfSentences){
 		StringBuilder str = new StringBuilder();
 		int preLastIndex = textBook.lastIndexOf('.', textBookLength-2);
 		for (int i = 0; i < numOfSentences; i++) {
@@ -118,16 +127,16 @@ public class TextGen extends ITextGenerator{
 		return "+420"+num;
 	}
 	
-	public String genFirstName(boolean nationalChar){
+	public String genFirstName(){
 		return nationalChar ? cs_firstNames[rand.nextInt(NAME_COUNT)] : us_firstNames[rand.nextInt(NAME_COUNT)];
 	}
 	
-	public String genLastName(boolean nationalChar){
+	public String genLastName(){
 		return nationalChar ? cs_lastNames[rand.nextInt(NAME_COUNT)] : us_lastNames[rand.nextInt(NAME_COUNT)];
 	}
 	
-	public String genFullName(boolean nationalChar){
-		return genFirstName(nationalChar)+ " " + genLastName(nationalChar);
+	public String genFullName(){
+		return genFirstName()+ " " + genLastName();
 	}
 	
 	public String genWebsite(){
@@ -158,14 +167,74 @@ public class TextGen extends ITextGenerator{
 	}
 	
 	@Override
-	public String genSubject(boolean nationalChar) {
-		return genSentence(nationalChar, 1);
+	public String genSubject() {
+		return genSentence(1);
 	}
 
 	@Override
-	public String genShortContent(boolean nationalChar) {
+	public String genShortContent() {
 		// TODO Auto-generated method stub
-		return genParagraph(nationalChar, rand.nextInt(3)+1);
+		return genParagraph(rand.nextInt(3)+1);
+	}
+	
+	public String genJobTitle(){
+		final String[] jobTitles = {"Tester", "Manager", "Technical Writer", "Developer" , "Supporter"};
+		return jobTitles[rand.nextInt(jobTitles.length)];
+	}
+	
+	public String genCompany(){
+		final String[] companies = {"Kerio", "Google", "Yahoo", "Microsoft", "Facebook", "Apple", "Samsung"};
+		return companies[rand.nextInt(companies.length)];
+	}
+
+
+	@Override
+	public Date genBirthDay() {
+		DateTime birthDay = new DateTime();
+		birthDay = birthDay.minusYears(rand.nextInt(40)+20);
+		birthDay = birthDay.minusMonths(rand.nextInt(12));
+		birthDay = birthDay.minusDays(rand.nextInt(31));
+		return birthDay.toDate();
+	}
+
+	@Override
+	public Date genAnniversary() {
+		DateTime birthDay = new DateTime();
+		birthDay = birthDay.minusYears(rand.nextInt(20)+5);
+		birthDay = birthDay.minusMonths(rand.nextInt(12));
+		birthDay = birthDay.minusDays(rand.nextInt(31));
+		return birthDay.toDate();
+	}
+
+
+	@Override
+	public String genMiddleName() {
+		final String[] names = {"Mae", "Marie", "May", "Lee", "Ann", "Mary", "Duc"};
+		return names[rand.nextInt(names.length)];
+	}
+
+
+	@Override
+	public String genNickName() {
+		final String[] nickNames = {"Jack", "Katie", "Johny", "Abby", "Sara", "Fiona", "Sam", "Shrek", "Juan"};
+		return nickNames[rand.nextInt(nickNames.length)];
+	}
+
+	@Override
+	public String genEmail() {
+		return genEmail(genFirstName(), genLastName());
+	}
+
+	@Override
+	public String genEmail(String firstName, String lastName) {
+		String firstPart = firstName.toLowerCase() + "." + lastName.toLowerCase();
+		firstPart = Normalizer.normalize(firstPart, Normalizer.Form.NFD).replaceAll("[^\\x00-\\x7F]", "");
+		return firstPart + (rand.nextInt(99) + 1)+ "@" + genCompany().toLowerCase() + ".kom";
+	}
+	
+	public String genLocation(){
+		String []cities = (nationalChar) ? CZ_CITIES : OTHER_CITIES;
+		return cities[rand.nextInt(cities.length)];
 	}
 	
 	

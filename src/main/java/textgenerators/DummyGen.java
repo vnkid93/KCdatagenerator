@@ -1,5 +1,7 @@
 package textgenerators;
 
+import java.util.Date;
+
 public class DummyGen extends ITextGenerator{
 	private final String CZECH_SENTENCE = "Vidíte to, fakt vostrý to krůta, prso, uděláme vějířky a k tomu, ať je bezpracná, to dávají do šejku, Klára ji do změknutí nechat.";
 	private final String US_SENTENCE = "Hello, how are you";
@@ -10,7 +12,7 @@ public class DummyGen extends ITextGenerator{
 		super();
 	}
 
-	public String genWords(boolean nationalChar, int numOfWords) {
+	public String genWords(int numOfWords) {
 		StringBuilder str = new StringBuilder();
 		String append = (nationalChar) ? CZECH_WORD : US_WORD;
 		for (int i = 0; i < numOfWords; i++) {
@@ -19,7 +21,7 @@ public class DummyGen extends ITextGenerator{
 		return str.toString();
 	}
 
-	public String genParagraph(boolean nationalChar, int numOfPar) {
+	public String genParagraph(int numOfPar) {
 		StringBuilder str = new StringBuilder();
 		String append = (nationalChar) ? CZECH_SENTENCE : US_SENTENCE;
 		for (int i = 0; i < numOfPar; i++) {
@@ -32,7 +34,7 @@ public class DummyGen extends ITextGenerator{
 		return str.toString();
 	}
 
-	public String genSentence(boolean nationalChar, int numOfSentences) {
+	public String genSentence(int numOfSentences) {
 		StringBuilder str = new StringBuilder();
 		String append = (nationalChar) ? CZECH_SENTENCE : US_SENTENCE;
 		for (int j = 0; j < numOfSentences; j++) {
@@ -45,17 +47,17 @@ public class DummyGen extends ITextGenerator{
 		return "+420777123456";
 	}
 
-	public String genFirstName(boolean nationalChar) {
+	public String genFirstName() {
 		// TODO Auto-generated method stub
 		return (nationalChar) ? "Aněžda" : "John";
 	}
 
-	public String genLastName(boolean nationalChar) {
+	public String genLastName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public String genFullName(boolean nationalChar) {
+	public String genFullName() {
 		return (nationalChar) ? "Dvořáková" : "Brown";
 	}
 
@@ -74,14 +76,53 @@ public class DummyGen extends ITextGenerator{
 	}
 
 	@Override
-	public String genSubject(boolean nationalChar) {
-		return genSentence(nationalChar, 1);
+	public String genSubject() {
+		return genSentence(1);
 	}
 
 	@Override
-	public String genShortContent(boolean nationalChar) {
+	public String genShortContent() {
 		// TODO Auto-generated method stub
-		return genParagraph(nationalChar, rand.nextInt(3)+1);
+		return genParagraph(rand.nextInt(3)+1);
+	}
+
+	@Override
+	public Date genBirthDay() {
+		return new Date();
+	}
+
+	@Override
+	public Date genAnniversary() {
+		// TODO Auto-generated method stub
+		return new Date();
+	}
+
+	@Override
+	public String genMiddleName() {
+		return "Duc";
+	}
+
+	@Override
+	public String genNickName() {
+		return "Jack";
+	}
+
+	@Override
+	public String genEmail() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String genEmail(String firstName, String lastName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String genLocation() {
+		// TODO Auto-generated method stub
+		return (nationalChar) ? "Třebíč" : "Prague";
 	}
 
 }

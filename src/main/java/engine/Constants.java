@@ -33,7 +33,7 @@ public class Constants {
 	
 	/* EVENTS */
 	public static final int EVENT_DURATION_START_INDEX = 0;
-	public static final int EVENT_DURATION_END_INDEX = 0;
+	public static final int EVENT_DURATION_END_INDEX = 1;
 	
 	
 }
