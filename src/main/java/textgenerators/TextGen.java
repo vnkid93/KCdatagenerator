@@ -5,48 +5,62 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
 import de.svenjacobs.loremipsum.LoremIpsum;
+import engine.SimpleAddress;
 
 public class TextGen extends ITextGenerator{
-	private static final int NAME_COUNT = 100;
 	private LoremIpsum loremIpsum;
 	private static TextGen instance = null;
 	
-	private final String[] cs_firstNames = new String[NAME_COUNT];
-	private final String[] cs_lastNames = new String[NAME_COUNT];
-	private final String[] us_firstNames = new String[NAME_COUNT];
-	private final String[] us_lastNames = new String[NAME_COUNT];
+	private String[] cs_firstNames = null;
+	private String[] cs_lastNames = null;
+	private String[] us_firstNames = null;
+	private String[] us_lastNames = null;
+	private String[] countries = null;
 	
 	private static final String[] CZ_CITIES = {"Plzeň", "České Budějovice", "Mariánské Lázně", "Hradec Králové", "Telč", "Litoměřice", "Děčín", "Ústí nad Labem"};
 	private static final String[] OTHER_CITIES = {"New York", "Los Angeles", "Praha", "Hanoi", "Chicago", "London", "Brno", "Saigon"};
 	
+	
+	final String[] domains = {".eu", ".com", ".cz", ".ru", ".vn", ".org", ".biz", ".io", ".net"};
+	final String[] companies = {"Kerio", "Google", "Yahoo", "Microsoft", "Facebook", "Apple", "Samsung", "Seznam"};
+	final String[] jobTitles = {"Tester", "Manager", "Technical Writer", "Developer" , "Supporter", "Secretary", "Administrator", "Designer", "Production Coordinator", "Marketing Manager"};
 
+	final String[] nickNames = {"Jack", "Katie", "Johny", "Abby", "Sara", "Fiona", "Sam", "Shrek", "Juan"};
+	final String[] names = {"Mae", "Marie", "May", "Lee", "Ann", "Mary", "Duc"};
+	
 	private String textBook;
 	private int textBookLength;
 	
 	private TextGen(){
 		super();
-		fillNames(cs_firstNames, "src/main/resources/cs_firstname.txt");
-		fillNames(cs_lastNames, "src/main/resources/cs_lastname.txt");
-		fillNames(us_firstNames, "src/main/resources/us_firstname.txt");
-		fillNames(us_lastNames, "src/main/resources/us_lastname.txt");
+		cs_firstNames = fillNames("src/main/resources/cs_firstname.txt");
+		cs_lastNames = fillNames("src/main/resources/cs_lastname.txt");
+		us_firstNames = fillNames("src/main/resources/us_firstname.txt");
+		us_lastNames = fillNames("src/main/resources/us_lastname.txt");
 		fillText();
+		countries = fillCountries("src/main/resources/countries.txt");
 	}
 	
 	
-	
-	
-	private void fillNames(String[] nameArr, String filePath){
+	private String[] fillCountries(String filePath){
+		String[] countries = null;
 		try {
 			FileReader fr = new FileReader(filePath);
 			BufferedReader br = new BufferedReader(fr);
-			for (int i = 0; i < nameArr.length; i++) {
-				nameArr[i] = br.readLine();
+			List<String> list = new ArrayList<String>();
+			
+			String line;
+			while((line=br.readLine()) != null){
+				list.add(line);
 			}
+			countries = list.toArray(new String[list.size()]);
 			br.close();
 			fr.close();
 		} catch (FileNotFoundException e) {
@@ -56,6 +70,31 @@ public class TextGen extends ITextGenerator{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return countries;
+	}
+	
+	private String[] fillNames(String filePath){
+		String[] nameArr = null;
+		try {
+			FileReader fr = new FileReader(filePath);
+			BufferedReader br = new BufferedReader(fr);
+			List<String> list = new ArrayList<String>();
+			String line;
+			while((line=br.readLine()) != null){
+				list.add(line);
+			}
+			
+			nameArr = list.toArray(new String[list.size()]);
+			br.close();
+			fr.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return nameArr;
 	}
 	
 	private void fillText(){
@@ -128,11 +167,11 @@ public class TextGen extends ITextGenerator{
 	}
 	
 	public String genFirstName(){
-		return nationalChar ? cs_firstNames[rand.nextInt(NAME_COUNT)] : us_firstNames[rand.nextInt(NAME_COUNT)];
+		return nationalChar ? cs_firstNames[rand.nextInt(cs_firstNames.length)] : us_firstNames[rand.nextInt(us_firstNames.length)];
 	}
 	
 	public String genLastName(){
-		return nationalChar ? cs_lastNames[rand.nextInt(NAME_COUNT)] : us_lastNames[rand.nextInt(NAME_COUNT)];
+		return nationalChar ? cs_lastNames[rand.nextInt(cs_lastNames.length)] : us_lastNames[rand.nextInt(cs_lastNames.length)];
 	}
 	
 	public String genFullName(){
@@ -141,7 +180,6 @@ public class TextGen extends ITextGenerator{
 	
 	public String genWebsite(){
 		StringBuilder str = new StringBuilder();
-		final String[] domains = {".eu", ".com", ".cz", ".ru", ".vn", ".org", ".biz", ".io", ".net"};
 		str.append("www.");
 		int count = rand.nextInt(20)+5;
 		
@@ -162,8 +200,7 @@ public class TextGen extends ITextGenerator{
 
 	@Override
 	public String genLoginName() {
-		
-		return "FIX_THIS";
+		return "testxx";
 	}
 	
 	@Override
@@ -178,12 +215,11 @@ public class TextGen extends ITextGenerator{
 	}
 	
 	public String genJobTitle(){
-		final String[] jobTitles = {"Tester", "Manager", "Technical Writer", "Developer" , "Supporter"};
 		return jobTitles[rand.nextInt(jobTitles.length)];
 	}
 	
 	public String genCompany(){
-		final String[] companies = {"Kerio", "Google", "Yahoo", "Microsoft", "Facebook", "Apple", "Samsung"};
+		
 		return companies[rand.nextInt(companies.length)];
 	}
 
@@ -209,14 +245,12 @@ public class TextGen extends ITextGenerator{
 
 	@Override
 	public String genMiddleName() {
-		final String[] names = {"Mae", "Marie", "May", "Lee", "Ann", "Mary", "Duc"};
 		return names[rand.nextInt(names.length)];
 	}
 
 
 	@Override
 	public String genNickName() {
-		final String[] nickNames = {"Jack", "Katie", "Johny", "Abby", "Sara", "Fiona", "Sam", "Shrek", "Juan"};
 		return nickNames[rand.nextInt(nickNames.length)];
 	}
 
@@ -235,6 +269,19 @@ public class TextGen extends ITextGenerator{
 	public String genLocation(){
 		String []cities = (nationalChar) ? CZ_CITIES : OTHER_CITIES;
 		return cities[rand.nextInt(cities.length)];
+	}
+	
+	public String genCountry(){
+		return countries[rand.nextInt(countries.length)];
+	}
+	
+	public SimpleAddress genAddress(){
+		String street = us_lastNames[rand.nextInt(us_lastNames.length)] + " " + (rand.nextInt(200)+1);
+		String city = genLocation();
+		String zip = (rand.nextInt(300)+100)+" "+(rand.nextInt(100));
+		String country = genCountry();
+		
+		return new SimpleAddress(street, city, country, zip);
 	}
 	
 	

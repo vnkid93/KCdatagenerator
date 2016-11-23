@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import bridge.EwsBridge;
 import engine.Constants;
 import engine.Probability;
+import engine.SimpleAddress;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.property.BodyType;
 import microsoft.exchange.webservices.data.core.enumeration.property.ImAddressKey;
@@ -75,14 +76,26 @@ public class ContactGen extends BasicItemGenerator{
 			}
 			
 			contact.getImAddresses().setImAddressKey(ImAddressKey.ImAddress1, tGen.genEmail(contact.getGivenName(), contact.getSurname()));
-
-//			if(addresses != null && addresses.length > 0 && addresses.length <= Constants.ADDRESS_INDEXES.length){		
-//				PhysicalAddressDictionary addressDict = contact.getPhysicalAddresses();
-//				for (int i = 0; i < addresses.length; i++) {
-//					if(addresses[i] != null)	addressDict.setPhysicalAddress(Constants.ADDRESS_INDEXES[i], addresses[i]);
-//				}
-//			}
+		
+			PhysicalAddressDictionary addressDict = contact.getPhysicalAddresses();
+			for (int i = 0; i < Constants.ADDRESS_INDEXES.length; i++) {
+				PhysicalAddressEntry entry = new PhysicalAddressEntry();
+				SimpleAddress address = tGen.genAddress();
+				entry.setCity(address.city);
+				entry.setStreet(address.street);
+				entry.setPostalCode(address.zip);
+				entry.setCountryOrRegion(address.country);
+				entry.setState(address.state);
+				addressDict.setPhysicalAddress(Constants.ADDRESS_INDEXES[i], entry);
+			}			
 			
+			if(Probability.getInstance().tryLuck(3)){
+				String path = "src/main/resources/img/male-icon.gif";
+				if(Probability.getInstance().tryLuck(50)){
+					path = "src/main/resources/img/female-icon.gif";
+				}		
+				contact.setContactPicture(path);
+			}
 			
 			
 			contact.setDepartment("Department");
@@ -90,6 +103,8 @@ public class ContactGen extends BasicItemGenerator{
 						
 //			ExtendedPropertyDefinition titlePropDef = new ExtendedPropertyDefinition(0x3A45, MapiPropertyType.String);
 //			contact.setExtendedProperty(titlePropDef, title);
+			
+			
 			
 			
 			//TODO validate params

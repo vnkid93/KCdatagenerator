@@ -16,15 +16,9 @@ public class ContactGroupGen extends BasicItemGenerator{
 		try {
 			ContactGroup group = new ContactGroup(service);
 			group.setDisplayName(groupName);
-			//group.getMembers().add(new GroupMember("test03@tony.lab"));
-			/*for (SimpleAccount simpleAccount : contacts) {
-				group.getMembers().add(new GroupMember(simpleAccount.emailAddress));
-			}*/
-			
 			group.save();
 			
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
