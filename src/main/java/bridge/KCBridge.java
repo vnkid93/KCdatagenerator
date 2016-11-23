@@ -1,8 +1,13 @@
 package bridge;
 
 import com.kerio.lib.json.api.client.KApiClient;
+import com.kerio.lib.json.api.connect.admin.iface.Domains;
 import com.kerio.lib.json.api.connect.admin.iface.Session;
+import com.kerio.lib.json.api.connect.admin.iface.Users;
+import com.kerio.lib.json.api.connect.admin.struct.Domain;
+import com.kerio.lib.json.api.connect.admin.struct.User;
 import com.kerio.lib.json.api.connect.admin.struct.common.ApiApplication;
+import com.kerio.lib.json.api.connect.admin.struct.common.SearchQuery;
 
 /**
  * An api bridge for connecting to the Kerio Web Admin.
@@ -12,6 +17,7 @@ import com.kerio.lib.json.api.connect.admin.struct.common.ApiApplication;
  */
 public class KCBridge extends KApiClient {
 
+	
 	@Override
 	public void login(String hostUrl, String username, String password) {
 		getSession().setHostname(hostUrl); // updating host name
@@ -27,4 +33,41 @@ public class KCBridge extends KApiClient {
 	public void logout(){
 		getApi(Session.class).logout();
 	}
+
+	/**
+	 * Return domain id from passed domain name
+	 * @param domainName the domain that will hav id returned
+	 * @return id of domain or null if that domain name was not found.
+	 */
+	public String getDomainId(String domainName){
+		String id = null;
+		Domains domainClass = getApi(Domains.class);
+		Domain[] domainList = domainClass.get(new SearchQuery()).getList();
+		for (Domain domain : domainList) {
+			if(domain.getName().equals(domainName)){
+				id = domain.getId();
+				break;
+			}
+		}
+		return id;
+	}
+	
+	public User[] getUserList(String domainId){
+		Users uClass = getApi(Users.class);
+		return uClass.get(new SearchQuery(), domainId).getList();
+	}
+	
+	public boolean isUserExist(String domainId, String userName){
+		User[] users = getUserList(domainId);
+		boolean found = false;
+		for (User user : users) {
+			if(user.getLoginName().equals(userName)){
+				found = true;
+				break;
+			}
+		}
+		return found;
+	}
+	
+	
 }

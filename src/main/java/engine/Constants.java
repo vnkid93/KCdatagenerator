@@ -35,5 +35,8 @@ public class Constants {
 	public static final int EVENT_DURATION_START_INDEX = 0;
 	public static final int EVENT_DURATION_END_INDEX = 1;
 	
+	public static final String AVATAR_IMG_MALE = "src/main/resources/img/male-icon.gif";
+	public static final String AVATAR_IMG_FEMALE = "src/main/resources/img/female-icon.gif";
+	
 	
 }

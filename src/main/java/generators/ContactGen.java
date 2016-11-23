@@ -1,17 +1,13 @@
 package generators;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import bridge.EwsBridge;
 import engine.Constants;
 import engine.Probability;
 import engine.SimpleAddress;
-import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.property.BodyType;
 import microsoft.exchange.webservices.data.core.enumeration.property.ImAddressKey;
-import microsoft.exchange.webservices.data.core.enumeration.property.MapiPropertyType;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
 import microsoft.exchange.webservices.data.core.service.item.Contact;
 import microsoft.exchange.webservices.data.core.service.item.Item;
@@ -22,14 +18,13 @@ import microsoft.exchange.webservices.data.property.complex.MessageBody;
 import microsoft.exchange.webservices.data.property.complex.PhoneNumberDictionary;
 import microsoft.exchange.webservices.data.property.complex.PhysicalAddressDictionary;
 import microsoft.exchange.webservices.data.property.complex.PhysicalAddressEntry;
-import microsoft.exchange.webservices.data.property.definition.ExtendedPropertyDefinition;
 import microsoft.exchange.webservices.data.search.FindItemsResults;
 import microsoft.exchange.webservices.data.search.ItemView;
 import textgenerators.TextGen;
 
 public class ContactGen extends BasicItemGenerator{
 	
-	
+	private final String[] generation = {"Junior", "Senior"};
 	
 	public ContactGen(EwsBridge bridge){
 		super(bridge);
@@ -50,7 +45,7 @@ public class ContactGen extends BasicItemGenerator{
 			if(Probability.getInstance().tryLuck(5))	contact.setMiddleName(tGen.genMiddleName());
 			
 			if(Probability.getInstance().tryLuck(5)){
-				contact.setGeneration(new String[]{"Junior", "Senior"}[rand.nextInt(2)]);
+				contact.setGeneration(generation[rand.nextInt(2)]);
 			}
 			
 			contact.setBody(new MessageBody(BodyType.Text, tGen.genSentence(3)));
@@ -90,9 +85,9 @@ public class ContactGen extends BasicItemGenerator{
 			}			
 			
 			if(Probability.getInstance().tryLuck(3)){
-				String path = "src/main/resources/img/male-icon.gif";
+				String path = Constants.AVATAR_IMG_MALE;
 				if(Probability.getInstance().tryLuck(50)){
-					path = "src/main/resources/img/female-icon.gif";
+					path = Constants.AVATAR_IMG_FEMALE;
 				}		
 				contact.setContactPicture(path);
 			}
@@ -104,11 +99,6 @@ public class ContactGen extends BasicItemGenerator{
 //			ExtendedPropertyDefinition titlePropDef = new ExtendedPropertyDefinition(0x3A45, MapiPropertyType.String);
 //			contact.setExtendedProperty(titlePropDef, title);
 			
-			
-			
-			
-			//TODO validate params
-			//contact.getPhysicalAddresses().setPhysicalAddress(PhysicalAddressKey.Home, address);
 			contact.save();
 		} catch (Exception e) {
 			e.printStackTrace();

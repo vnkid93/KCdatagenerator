@@ -1,15 +1,28 @@
 package main;
 
+
 import bridge.EwsBridge;
+import bridge.KCBridge;
 import engine.SimpleAccount;
+import generators.AccountGen;
 import generators.ContactGen;
+import generators.EventGen;
 import generators.MailGen;
+import generators.NoteGen;
+import generators.TaskGen;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 
 public class Main {
 	
 	private EwsBridge bridge;
 	private ExchangeService service;
+	// gnerators
+	private AccountGen accountGen;
+	private ContactGen contactGen;
+	private NoteGen noteGen;
+	private MailGen mailGen;
+	private TaskGen taskGen;
+	private EventGen eventGen;
 	
 	public Main(){
 		long time = System.currentTimeMillis();
@@ -17,9 +30,6 @@ public class Main {
 		bridge.setHostAndUrl("192.168.65.110");
 		service = bridge.getService();
 		
-		
-		//KCBridge client = new KCBridge();
-		//client.login("https://vm-ubuntu16-fresh:4040", "admin", "a");
 		MailGen m = new MailGen(bridge);
 		//m.sendEmail(m.createEmail("Z Javy", "Toto je text", new String[]{"test03@tony.lab"}));
 		
@@ -27,13 +37,14 @@ public class Main {
 		SimpleAccount acc2 = new SimpleAccount("Bart Simpson", "test03@tony.lab");
 		
 		
-		ContactGen gen = new ContactGen(bridge);
-		for (int i = 0; i < 500; i++) {
-			gen.createContact(true);
-		}
+		KCBridge client = new KCBridge();
+		client.login("https://192.168.65.110:4040", "admin", "a");
+		
+		AccountGen gen = new AccountGen(client);
+		gen.genUsers(5, true, client.getDomainId("tony.lab"));
 		
 		
-	
+		client.logout();
 		System.out.println(System.currentTimeMillis() - time);
 	}
 	
