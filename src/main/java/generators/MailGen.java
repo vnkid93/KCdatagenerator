@@ -146,12 +146,8 @@ public class MailGen extends BasicItemGenerator {
 		email.setHeaders(header);
 
 		email.buildMimeMessage();
-
 		msg = new EmailMessage(service);
-		
 		msg.setMimeContent(new MimeContent(Engine.CHARSET, serialize(email)));
-		
-		System.out.println("flaggg");
 
 		return msg;
 	}
