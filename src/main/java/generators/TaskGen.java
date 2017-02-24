@@ -2,8 +2,11 @@ package generators;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import bridge.EwsBridge;
+import engine.Constants;
+import engine.Probability;
 import engine.TimeInput;
 import microsoft.exchange.webservices.data.core.enumeration.property.WellKnownFolderName;
 import microsoft.exchange.webservices.data.core.enumeration.service.TaskStatus;
@@ -22,52 +25,104 @@ public class TaskGen extends BasicItemGenerator{
 		super(bridge);
 	}
 	
-	
-	public void createTask(String subject, String body, boolean completed, TimeInput dueDate, TimeInput reminderDate){
+	public Task createTask(String subject, String body, boolean completed, Date dueDate, Date reminderDate){
+		Task task = null;
 		try {
-			Task task = new Task(service);
+			task = new Task(service);
 			task.setSubject(subject);
 			task.setBody(new MessageBody(body));	//TODO set body type
 			if(completed){
 				task.setStatus(TaskStatus.Completed);				
 			}
 			if(dueDate != null){
-				task.setDueDate(dueDate.getDate());
+				task.setDueDate(dueDate);
 			}
 			if(reminderDate != null){
-				task.setReminderDueBy(reminderDate.getDate());
+				task.setReminderDueBy(reminderDate);
 				task.setIsReminderSet(true);
 			}			
-			task.save();
+			//task.save();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		return task;
 	}
 	
-	public void generateTasks(int count, String subjectPrefix){
-		try {	// longer code, but more effective
-			if(subjectPrefix != null && subjectPrefix.length() > 0){				
-				for (int i = 0; i < count; i++) {
-					Task task = new Task(service);
-					task.setSubject(subjectPrefix + i);
-					task.setBody(new MessageBody("neco... nevim co"));
-					task.setDueDate(new Date());
-					task.save();					
-				}
-			}else{
-				for (int i = 0; i < count; i++) {
-					Task task = new Task(service);
-					task.save();					
-				}
+	public Task[] generate(int count, boolean nationalChar, HashMap<String, Boolean> checkboxes, HashMap<String, Integer> slider, Date[] dateRange){
+		Task[] tasks = new Task[count];
+		tGen.setNationalChar(nationalChar);
+		Probability probability = Probability.getInstance();
+		
+		boolean htmlCode = checkboxes.get(Constants.HTMLCODE);
+		boolean link = checkboxes.get(Constants.LINKS);
+		int contentSize = slider.get(Constants.CONTENT_SIZE);
+		int completeProb = slider.get(Constants.COMPLETED);
+		int reminderProb = slider.get(Constants.REMINDER);
+		
+		
+		for (int i = 0; i < count; i++) {
+			String subject = tGen.genSubject();
+			StringBuilder body = new StringBuilder();
+			body.append(tGen.genParagraph(contentSize));
+			if(htmlCode){
+				body.append(Constants.NEW_LINE);
+				body.append(Constants.HTML_CODE_TO_APPEND);
+			}
+			if(link){
+				body.append(Constants.NEW_LINE);
+				body.append(Constants.LINK_TO_APPEND);
 			}
 			
+			boolean completed = probability.tryLuck(completeProb);
+			Date dueDate = TimeInput.getRandomDayInRange(dateRange[0], dateRange[1]);
+			Date reminderDate = (probability.tryLuck(reminderProb)) ? TimeInput.getRandomDayBefore(dueDate, Constants.TASK_REMINDER_DAY_BEFORE) : null;
 			
+			tasks[i] = createTask(subject, body.toString(), completed, dueDate, reminderDate);
+		}
+		return tasks;
+	}
+	
+	
+	public void generateAndSend(int count, boolean nationalChar, HashMap<String, Boolean> checkboxes, HashMap<String, Integer> slider, Date[] dateRange){
+		tGen.setNationalChar(nationalChar);
+		Probability probability = Probability.getInstance();
+		
+		boolean htmlCode = checkboxes.get(Constants.HTMLCODE);
+		boolean link = checkboxes.get(Constants.LINKS);
+		int contentSize = slider.get(Constants.CONTENT_SIZE);
+		int completeProb = slider.get(Constants.COMPLETED);
+		int reminderProb = slider.get(Constants.REMINDER);
+		
+		
+		for (int i = 0; i < count; i++) {
+			String subject = tGen.genSubject();
+			StringBuilder body = new StringBuilder();
+			body.append(tGen.genParagraph(contentSize));
+			if(htmlCode){
+				body.append(Constants.NEW_LINE);
+				body.append(Constants.HTML_CODE_TO_APPEND);
+			}
+			if(link){
+				body.append(Constants.NEW_LINE);
+				body.append(Constants.LINK_TO_APPEND);
+			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+			boolean completed = probability.tryLuck(completeProb);
+			Date dueDate = TimeInput.getRandomDayInRange(dateRange[0], dateRange[1]);
+			Date reminderDate = (probability.tryLuck(reminderProb)) ? TimeInput.getRandomDayBefore(dueDate, Constants.TASK_REMINDER_DAY_BEFORE) : null;
+			
+			try {
+				createTask(subject, body.toString(), completed, dueDate, reminderDate).save();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			};
 		}
 	}
+	
+	
+	
+	
 	
 	/**
 	 * Method that return all tasks that are presented in mian Task folder.

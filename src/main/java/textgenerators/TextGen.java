@@ -1,9 +1,10 @@
 package textgenerators;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,14 +47,16 @@ public class TextGen extends ITextGenerator{
 		us_lastNames = fillNames("src/main/resources/us_lastname.txt");
 		fillText();
 		countries = fillCountries("src/main/resources/countries.txt");
+		this.loremIpsum = new LoremIpsum();
 	}
 	
 	
 	private String[] fillCountries(String filePath){
 		String[] countries = null;
 		try {
-			FileReader fr = new FileReader(filePath);
-			BufferedReader br = new BufferedReader(fr);
+			InputStreamReader in = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
+			
+			BufferedReader br = new BufferedReader(in);
 			List<String> list = new ArrayList<String>();
 			
 			String line;
@@ -62,7 +65,7 @@ public class TextGen extends ITextGenerator{
 			}
 			countries = list.toArray(new String[list.size()]);
 			br.close();
-			fr.close();
+			in.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -76,8 +79,8 @@ public class TextGen extends ITextGenerator{
 	private String[] fillNames(String filePath){
 		String[] nameArr = null;
 		try {
-			FileReader fr = new FileReader(filePath);
-			BufferedReader br = new BufferedReader(fr);
+			InputStreamReader in = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
+			BufferedReader br = new BufferedReader(in);
 			List<String> list = new ArrayList<String>();
 			String line;
 			while((line=br.readLine()) != null){
@@ -86,7 +89,7 @@ public class TextGen extends ITextGenerator{
 			
 			nameArr = list.toArray(new String[list.size()]);
 			br.close();
-			fr.close();
+			in.close();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -99,8 +102,8 @@ public class TextGen extends ITextGenerator{
 	
 	private void fillText(){
 		try {
-			FileReader fr = new FileReader("src/main/resources/cs_text.txt");
-			BufferedReader br = new BufferedReader(fr);
+			InputStreamReader in = new InputStreamReader(new FileInputStream("src/main/resources/cs_text.txt"), "UTF-8");
+			BufferedReader br = new BufferedReader(in);
 			String line;
 			textBook = "";
 			while((line=br.readLine()) != null){
@@ -108,7 +111,7 @@ public class TextGen extends ITextGenerator{
 			}
 			textBookLength = textBook.length();
 			br.close();
-			fr.close();
+			in.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -134,27 +137,38 @@ public class TextGen extends ITextGenerator{
 	}
 	
 	public String genParagraph(int numOfPar){
-		final int parSize = 1000;
 		StringBuilder str = new StringBuilder();
-		for (int i = 0; i < numOfPar; i++) {
-			int seek = rand.nextInt((int)(textBookLength*0.5));
-			seek = textBook.indexOf('.', seek); // wtf
-			//textBook.index
-			//TODO do while to check the length
-			int nextIndex = textBook.indexOf('.', seek + (rand.nextInt(parSize / 4 * 1) + parSize / 4 * 3));
-			str.append(textBook.substring(seek+2, nextIndex+1));
-			str.append("\n");
+		if(nationalChar){
+			final int parSize = 1000;
+			for (int i = 0; i < numOfPar; i++) {
+				int seek = rand.nextInt((int)(textBookLength*0.5));
+				seek = textBook.indexOf('.', seek); // wtf
+				//textBook.index
+				//TODO do while to check the length
+				int nextIndex = textBook.indexOf('.', seek + (rand.nextInt(parSize / 4 * 1) + parSize / 4 * 3));
+				str.append(textBook.substring(seek+2, nextIndex+1));
+				str.append("\n");
+			}			
+		}else{
+			str.append(loremIpsum.getParagraphs(numOfPar));
 		}
+		
 		return str.toString();
 	}
 	
 	public String genSentence(int numOfSentences){
 		StringBuilder str = new StringBuilder();
-		int preLastIndex = textBook.lastIndexOf('.', textBookLength-2);
-		for (int i = 0; i < numOfSentences; i++) {
-			int seek = textBook.indexOf('.', rand.nextInt(preLastIndex));
-			str.append(textBook.substring(seek+2, textBook.indexOf('.', seek+1)));
-			str.append(". ");
+		if(nationalChar){
+			int preLastIndex = textBook.lastIndexOf('.', textBookLength-2);
+			for (int i = 0; i < numOfSentences; i++) {
+				int seek = textBook.indexOf('.', rand.nextInt(preLastIndex));
+				str.append(textBook.substring(seek+2, textBook.indexOf('.', seek+1)));
+				str.append(". ");
+			}			
+		}else{
+			for (int i = 0; i < numOfSentences; i++) {
+				str.append(loremIpsum.getWords(rand.nextInt(20) + 5) + ". ");
+			}
 		}
 		return str.toString().trim();
 	}
@@ -194,7 +208,7 @@ public class TextGen extends ITextGenerator{
 	}
 	
 	public String genPassword(boolean complex){
-		return complex ? "ABCabc132" : "a";
+		return complex ? "ABCabc123" : "a";
 	}
 
 

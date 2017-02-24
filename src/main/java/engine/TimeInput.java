@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Random;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 public class TimeInput {
 	// instance of date
@@ -94,6 +95,16 @@ public class TimeInput {
 	public static Date getMonthAfter(Date actualDate, int monthAfter) {
 		DateTime actual = new DateTime(actualDate);
 		actual = actual.plusMonths(monthAfter);
+		return actual.toDate();
+	}
+	
+	public static Date getRandomDayInRange(Date startDate, Date endDate){
+		DateTime actual = new DateTime(startDate);
+		int dayCount = Math.abs(Days.daysBetween(actual, new DateTime(endDate)).getDays());
+		if(dayCount == 0){
+			dayCount = 1;
+		}
+		actual = actual.plusDays(new Random().nextInt(dayCount));
 		return actual.toDate();
 	}
 }

@@ -51,6 +51,53 @@
 			<version>1.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/de.sven-jacobs/loremipsum -->
+		<dependency>
+		    <groupId>de.sven-jacobs</groupId>
+		    <artifactId>loremipsum</artifactId>
+		    <version>1.0</version>
+		</dependency>
+		
 
 	</dependencies>
+	
+	<build>
+		<plugins>
+			<!-- copy dependencies to another folder -->
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <version>2.5.1</version>
+			    <executions>
+			      <execution>
+			        <id>copy-dependencies</id>
+			        <phase>package</phase>
+			        <goals>
+			        <goal>copy-dependencies</goal>
+			        </goals>
+			        <configuration>
+			        <outputDirectory>${project.build.directory}/lib/</outputDirectory>
+			        </configuration>
+			      </execution>
+			    </executions>
+			</plugin>
+
+			<plugin>
+		        <artifactId>maven-assembly-plugin</artifactId>
+		        <executions>
+		          <execution>
+		            <phase>package</phase>
+		            <goals>
+		              <goal>single</goal>
+		            </goals>
+		          </execution>
+		        </executions>
+		        <configuration>
+		          <descriptorRefs>
+		            <descriptorRef>jar-with-dependencies</descriptorRef>
+		          </descriptorRefs>
+		        </configuration>
+		      </plugin>
+		</plugins>
+	</build>
 </project>

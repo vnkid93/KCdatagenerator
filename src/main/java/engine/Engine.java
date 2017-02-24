@@ -8,5 +8,5 @@ public class Engine {
 	
 	public static final String FONT_FAMILIES[] = {"Roboto", "Segoe UI", "Ubuntu", "lucida grande", "tahoma","sans-serif"}; 
 	
-	public static final int NOTES_COLOR_COUNT = 5;
+	
 }

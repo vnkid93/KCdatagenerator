@@ -3,9 +3,6 @@ package bridge;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import generators.EventGen;
-import generators.ContactGen;
-import generators.MailGen;
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.enumeration.misc.ExchangeVersion;
 import microsoft.exchange.webservices.data.core.service.folder.Folder;
@@ -25,25 +22,26 @@ public class EwsBridge {
 
 	private ExchangeService service;
 	private ExchangeCredentials credentials;
-	private MailGen email;
-	private ContactGen contacts;
-	private EventGen calendar;
 	private String host;
+	private String fullName;
+	private String emailAddress;
 	
 
 	public EwsBridge(String login, String password){
 		this(new WebCredentials(login, password));
+		this.emailAddress = login;
 	}
-	public EwsBridge(ExchangeCredentials credentials) {
+	private EwsBridge(ExchangeCredentials credentials) {
 		this(new ExchangeService(ExchangeVersion.Exchange2010_SP2), credentials);
 	}
-	public EwsBridge(ExchangeService service, ExchangeCredentials credentials) {
+	private  EwsBridge(ExchangeService service, ExchangeCredentials credentials) {
 		this.service = service;
 		this.credentials = credentials;
 		this.service.setCredentials(credentials);
-		this.email = new MailGen(this);
 		this.host = null;
+		this.fullName = null;
 	}
+	
 	
 	public void setHostAndUrl(String host){
 		this.host = host;
@@ -58,7 +56,9 @@ public class EwsBridge {
 		service.setUrl(url);
 	}
 	
-	
+	public void setFullName(String fullName){
+		this.fullName = fullName;
+	}
 	
 	public Item getItemById(ItemId id){
 		Item item = null;
@@ -112,19 +112,15 @@ public class EwsBridge {
 	public ExchangeService getService(){
 		return this.service;
 	}
-	public MailGen getEmail() {
-		return email;
-	}
-	public ContactGen getContacts() {
-		return contacts;
-	}
-	public EventGen getCalendar() {
-		return calendar;
-	}
 	public String getHost() {
 		return host;
 	}
 	
-	
+	public String getFullName(){
+		return fullName;
+	}
+	public String getEmail(){
+		return emailAddress;
+	}
 
 }

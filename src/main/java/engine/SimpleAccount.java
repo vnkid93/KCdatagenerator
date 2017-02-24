@@ -9,4 +9,8 @@ public class SimpleAccount {
 		this.fullName = fullName;
 		this.emailAddress = emailAddress;
 	}
+	
+	public SimpleAccount(String emailAddress){
+		this(null, emailAddress);
+	}
 }

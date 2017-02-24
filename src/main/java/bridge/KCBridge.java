@@ -3,6 +3,7 @@ package bridge;
 import com.kerio.lib.json.api.client.KApiClient;
 import com.kerio.lib.json.api.connect.admin.iface.Domains;
 import com.kerio.lib.json.api.connect.admin.iface.Session;
+import com.kerio.lib.json.api.connect.admin.iface.Session.LoginResult;
 import com.kerio.lib.json.api.connect.admin.iface.Users;
 import com.kerio.lib.json.api.connect.admin.struct.Domain;
 import com.kerio.lib.json.api.connect.admin.struct.User;
@@ -21,7 +22,7 @@ public class KCBridge extends KApiClient {
 	@Override
 	public void login(String hostUrl, String username, String password) {
 		getSession().setHostname(hostUrl); // updating host name
-		getApi(Session.class).login(username, password, new ApiApplication() {
+		LoginResult logResult = getApi(Session.class).login(username, password, new ApiApplication() {
 			{
 				setName("ComponentAdmin");
 				setVendor("AT");
@@ -67,6 +68,30 @@ public class KCBridge extends KApiClient {
 			}
 		}
 		return found;
+	}
+	
+	public String getFullName(String email){
+		String domainName = email.split("@")[1];
+		return getFullName(getDomainId(domainName), email);
+	}
+	
+	public String getFullName(String domainId, String email){
+		String fullName = "";
+		User[] users = getUserList(domainId);
+		for (User user : users) {
+			if(user.getEmailAddresses().equals(email)){
+				fullName = user.getFullName();
+				break;
+			}
+		}
+		return fullName;
+	}
+	
+	public String getPrimaryDomainId(){
+		Domains domainClass = getApi(Domains.class);
+		Domain[] domainList = domainClass.get(new SearchQuery()).getList();
+		return (domainList != null && domainList.length > 0) ? domainList[0].getId() : null;
+		
 	}
 	
 	
