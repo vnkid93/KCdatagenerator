@@ -52,12 +52,17 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/de.sven-jacobs/loremipsum -->
-		<dependency>
+		<!-- <dependency>
 		    <groupId>de.sven-jacobs</groupId>
 		    <artifactId>loremipsum</artifactId>
 		    <version>1.0</version>
-		</dependency>
+		</dependency> -->
 		
+		<dependency>
+		    <groupId>com.thedeanda</groupId>
+		    <artifactId>lorem</artifactId>
+		    <version>2.1</version>
+		</dependency>
 
 	</dependencies>
 	

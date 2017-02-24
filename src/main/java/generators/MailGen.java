@@ -18,8 +18,10 @@ import engine.Constants;
 import engine.Engine;
 import engine.Probability;
 import engine.SimpleAccount;
+import microsoft.exchange.webservices.data.core.enumeration.property.MapiPropertyType;
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.property.complex.MimeContent;
+import microsoft.exchange.webservices.data.property.definition.ExtendedPropertyDefinition;
 
 public class MailGen extends BasicItemGenerator {
 
@@ -146,7 +148,10 @@ public class MailGen extends BasicItemGenerator {
 		email.buildMimeMessage();
 
 		msg = new EmailMessage(service);
+		
 		msg.setMimeContent(new MimeContent(Engine.CHARSET, serialize(email)));
+		
+		System.out.println("flaggg");
 
 		return msg;
 	}
@@ -206,9 +211,15 @@ public class MailGen extends BasicItemGenerator {
 		
 		return msg;
 	}
+	
 
 	public String toPriority(boolean high) {
 		return (high) ? "1" : "3";
+	}
+	
+	private void setFlag(EmailMessage msg) throws Exception{
+		msg.setExtendedProperty(new ExtendedPropertyDefinition(0x1090, MapiPropertyType.Integer), 2);
+		msg.setExtendedProperty(new ExtendedPropertyDefinition(0x0E2B, MapiPropertyType.Integer), 1);
 	}
 
 	/**
