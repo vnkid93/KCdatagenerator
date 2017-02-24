@@ -86,7 +86,7 @@ public class TextGen extends ITextGenerator{
 			while((line=br.readLine()) != null){
 				list.add(line);
 			}
-			
+			 
 			nameArr = list.toArray(new String[list.size()]);
 			br.close();
 			in.close();
