@@ -40,9 +40,9 @@ public class Main {
 		
 		HashMap<String, Integer> sliderValues = new HashMap<String, Integer>();
 		sliderValues.put(Constants.CONTENT_SIZE, 3);
-		sliderValues.put(Constants.FLAG_PROB, 10);
+		sliderValues.put(Constants.FLAG_PROB, 50);
 		sliderValues.put(Constants.HIGH_PRIORITY, 10);
-		sliderValues.put(Constants.ATTACHMENT_PROB, 90);
+		sliderValues.put(Constants.ATTACHMENT_PROB, 10);
 		sliderValues.put(Constants.INLINE_IMG_PROB, 0);
 		
 		checkboxes.put(Constants.READCONFIRM, false);
@@ -50,9 +50,11 @@ public class Main {
 		checkboxes.put(Constants.SUBJECT, true);
 		checkboxes.put(Constants.HTMLCODE, false);
 		checkboxes.put(Constants.LINKS, false);
+		
+		
 		ArrayList<SimpleAccount> rep = new ArrayList<SimpleAccount>();
 		rep.add(new SimpleAccount("test@tony.lab"));
-		br.genEmails(10, true, checkboxes, sliderValues, rep);
+		br.genEmails(10, false, checkboxes, sliderValues, rep);
 		
 		//br.genNotes(15, true, checkboxes, sliderValues);
 		

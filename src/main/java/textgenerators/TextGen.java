@@ -12,7 +12,8 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import de.svenjacobs.loremipsum.LoremIpsum;
+import com.thedeanda.lorem.LoremIpsum;
+
 import engine.SimpleAddress;
 
 public class TextGen extends ITextGenerator{
@@ -47,7 +48,7 @@ public class TextGen extends ITextGenerator{
 		us_lastNames = fillNames("src/main/resources/us_lastname.txt");
 		fillText();
 		countries = fillCountries("src/main/resources/countries.txt");
-		this.loremIpsum = new LoremIpsum();
+		this.loremIpsum = LoremIpsum.getInstance();
 	}
 	
 	
@@ -86,7 +87,7 @@ public class TextGen extends ITextGenerator{
 			while((line=br.readLine()) != null){
 				list.add(line);
 			}
-			 
+			
 			nameArr = list.toArray(new String[list.size()]);
 			br.close();
 			in.close();
@@ -150,7 +151,7 @@ public class TextGen extends ITextGenerator{
 				str.append("\n");
 			}			
 		}else{
-			str.append(loremIpsum.getParagraphs(numOfPar));
+			str.append(loremIpsum.getParagraphs(numOfPar, numOfPar));
 		}
 		
 		return str.toString();
