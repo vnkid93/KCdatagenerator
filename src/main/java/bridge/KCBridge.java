@@ -1,5 +1,7 @@
 package bridge;
 
+import org.apache.log4j.Logger;
+
 import com.kerio.lib.json.api.client.KApiClient;
 import com.kerio.lib.json.api.connect.admin.iface.Domains;
 import com.kerio.lib.json.api.connect.admin.iface.Session;
@@ -17,10 +19,12 @@ import com.kerio.lib.json.api.connect.admin.struct.common.SearchQuery;
  *
  */
 public class KCBridge extends KApiClient {
-
+	
+	static final Logger logger = Logger.getLogger(KCBridge.class);
 	
 	@Override
 	public void login(String hostUrl, String username, String password) {
+		logger.debug("Starting to log in");
 		getSession().setHostname(hostUrl); // updating host name
 		LoginResult logResult = getApi(Session.class).login(username, password, new ApiApplication() {
 			{
@@ -32,6 +36,7 @@ public class KCBridge extends KApiClient {
 	}
 	
 	public void logout(){
+		logger.debug("Logging out");
 		getApi(Session.class).logout();
 	}
 
@@ -41,6 +46,7 @@ public class KCBridge extends KApiClient {
 	 * @return id of domain or null if that domain name was not found.
 	 */
 	public String getDomainId(String domainName){
+		logger.debug("Getting domain id by name: "+domainName);
 		String id = null;
 		Domains domainClass = getApi(Domains.class);
 		Domain[] domainList = domainClass.get(new SearchQuery()).getList();
@@ -54,6 +60,7 @@ public class KCBridge extends KApiClient {
 	}
 	
 	public User[] getUserList(String domainId){
+		logger.debug("Getting user list by id: "+domainId);
 		Users uClass = getApi(Users.class);
 		return uClass.get(new SearchQuery(), domainId).getList();
 	}
@@ -88,6 +95,7 @@ public class KCBridge extends KApiClient {
 	}
 	
 	public String getPrimaryDomainId(){
+		logger.debug("Getting primary domain id");
 		Domains domainClass = getApi(Domains.class);
 		Domain[] domainList = domainClass.get(new SearchQuery()).getList();
 		return (domainList != null && domainList.length > 0) ? domainList[0].getId() : null;

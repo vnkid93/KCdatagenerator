@@ -148,6 +148,9 @@ public class MailGen extends BasicItemGenerator {
 		email.buildMimeMessage();
 		msg = new EmailMessage(service);
 		msg.setMimeContent(new MimeContent(Engine.CHARSET, serialize(email)));
+		if(flag){
+			setFlag(msg);
+		}
 
 		return msg;
 	}
@@ -204,6 +207,9 @@ public class MailGen extends BasicItemGenerator {
 
 		msg = new EmailMessage(service);
 		msg.setMimeContent(new MimeContent(Engine.CHARSET, serialize(email)));
+		if(flag){
+			setFlag(msg);
+		}
 		
 		return msg;
 	}
