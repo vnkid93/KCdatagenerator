@@ -47,9 +47,20 @@ public class AccountGen {
 		return u;
 	}
 	
-	public void genenerateAndSave(int count, boolean nationalChar, String domainName, HashMap<String, Boolean> checkboxes){
+	public boolean genenerateAndSave(int count, boolean nationalChar, String domainName, HashMap<String, Boolean> checkboxes){
 		tGen.setNationalChar(nationalChar);
-		String domainId = (domainName == null || domainName.length() == 0) ? kcBridge.getPrimaryDomainId() : kcBridge.getDomainId(domainName);
+		String domainId = null;
+		if(domainName != null && domainName.length() > 0){
+			try {
+				domainId = kcBridge.getDomainId(domainName);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}else{
+			domainId = kcBridge.getPrimaryDomainId();
+		}
+		
 		int number = kcBridge.getUserList(domainId).length;
 		String password = tGen.genPassword(checkboxes.get(Constants.PASSWORD));
 		boolean containsFullName = checkboxes.get(Constants.FULLNAME);
@@ -61,6 +72,7 @@ public class AccountGen {
 			users[i] = createUser(domainId, DEFAULT_LOGIN+(++number), password, fullName, desc);
 		}
 		uClass.create(users);
+		return true;
 	}
 	
 	public void defaultGenerating(int count){

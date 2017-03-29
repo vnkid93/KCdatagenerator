@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 
 import com.thedeanda.lorem.LoremIpsum;
@@ -19,7 +19,7 @@ import engine.SimpleAddress;
 
 public class TextGen extends ITextGenerator{
 	
-	final static Logger logger = Logger.getLogger(TextGen.class);
+	//final static Logger logger = Logger.getLogger(TextGen.class);
 	private LoremIpsum loremIpsum;
 	private static TextGen instance = null;
 	
@@ -45,7 +45,7 @@ public class TextGen extends ITextGenerator{
 	
 	private TextGen(){
 		super();
-		logger.debug("Start initializing");
+		//logger.debug("Start initializing");
 		cs_firstNames = fillNames("src/main/resources/cs_firstname.txt");
 		cs_lastNames = fillNames("src/main/resources/cs_lastname.txt");
 		us_firstNames = fillNames("src/main/resources/us_firstname.txt");
@@ -53,12 +53,12 @@ public class TextGen extends ITextGenerator{
 		fillText();
 		countries = fillCountries("src/main/resources/countries.txt");
 		this.loremIpsum = LoremIpsum.getInstance();
-		logger.debug("Initializing ended");
+		//logger.debug("Initializing ended");
 	}
 	
 	
 	private String[] fillCountries(String filePath){
-		logger.debug("Starting to fill countries");
+		//logger.debug("Starting to fill countries");
 		String[] countries = null;
 		try {
 			InputStreamReader in = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
@@ -74,17 +74,17 @@ public class TextGen extends ITextGenerator{
 			br.close();
 			in.close();
 		} catch (FileNotFoundException e) {
-			logger.error("File not found: "+filePath);
+			//logger.error("File not found: "+filePath);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("IO Exception during reading file "+filePath);
+			//logger.error("IO Exception during reading file "+filePath);
 			e.printStackTrace();
 		}
 		return countries;
 	}
 	
 	private String[] fillNames(String filePath){
-		logger.debug("Starting to fill names");
+		//logger.debug("Starting to fill names");
 		String[] nameArr = null;
 		try {
 			InputStreamReader in = new InputStreamReader(new FileInputStream(filePath), "UTF-8");
@@ -99,10 +99,10 @@ public class TextGen extends ITextGenerator{
 			br.close();
 			in.close();
 		} catch (FileNotFoundException e) {
-			logger.error("File not found: "+filePath);
+			//logger.error("File not found: "+filePath);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("IO Exception during reading file "+filePath);
+			//logger.error("IO Exception during reading file "+filePath);
 			e.printStackTrace();
 		}
 		return nameArr;
@@ -110,7 +110,7 @@ public class TextGen extends ITextGenerator{
 	
 	private void fillText(){
 		final String fileName = "cs_text.txt";
-		logger.debug("Starting to fill text: "+fileName);
+		//logger.debug("Starting to fill text: "+fileName);
 		try {
 			InputStreamReader in = new InputStreamReader(new FileInputStream("src/main/resources/"+fileName), "UTF-8");
 			BufferedReader br = new BufferedReader(in);
@@ -123,10 +123,10 @@ public class TextGen extends ITextGenerator{
 			br.close();
 			in.close();
 		} catch (FileNotFoundException e) {
-			logger.error("File not found: "+fileName);
+			//logger.error("File not found: "+fileName);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("IO Exception during reading file "+fileName);
+			//logger.error("IO Exception during reading file "+fileName);
 			e.printStackTrace();
 		}
 	}
@@ -186,7 +186,7 @@ public class TextGen extends ITextGenerator{
 	}
 	
 	public String genTelNumber(){
-		logger.debug("Generating telephone number");
+		//logger.debug("Generating telephone number");
 		final int CONST = 100000000;
 		int num = (int)(rand.nextFloat() * (10 * CONST));
 		if(num < CONST) num += CONST;

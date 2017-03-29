@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ApiClient extends KApiClient {
 
-	private final Logger logger = LoggerFactory.getLogger(ApiClient.class);
+	//private final Logger logger = LoggerFactory.getLogger(ApiClient.class);
 
 	@Override
 	public void login(String hostUrl, String username, String password) {
@@ -24,13 +24,13 @@ public class ApiClient extends KApiClient {
 				setVersion("1.0");
 			}
 		});
-		this.logger.debug("logged in");
+		//this.logger.debug("logged in");
 	}
 
 	@Override
 	public void logout() {
 		getApi(Session.class).logout();
-		this.logger.debug("logged out");
+		//this.logger.debug("logged out");
 	}
 	
 

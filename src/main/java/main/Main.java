@@ -31,7 +31,7 @@ public class Main {
 	
 	public Main(){
 		
-		NodejsBridge br = new NodejsBridge("192.168.65.110", "admin", "a", "test@tony.lab", "a");
+		NodejsBridge br = new NodejsBridge("192.168.65.110", "admins", "a", "test@tony.lab", "a");
 		HashMap<String, Boolean> checkboxes = new HashMap<String, Boolean>();
 		checkboxes.put(Constants.HTMLCODE, false);
 		checkboxes.put(Constants.LINKS, false);
@@ -54,7 +54,7 @@ public class Main {
 		
 		ArrayList<SimpleAccount> rep = new ArrayList<SimpleAccount>();
 		rep.add(new SimpleAccount("test@tony.lab"));
-		br.genEmails(10, false, checkboxes, sliderValues, rep);
+		//br.genEmails(10, false, checkboxes, sliderValues, rep);
 		
 		//br.genNotes(15, true, checkboxes, sliderValues);
 		
