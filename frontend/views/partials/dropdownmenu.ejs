@@ -1,0 +1,15 @@
+<% if(params.isLogged){ %>
+
+  <ul class="nav navbar-top-links navbar-right">
+    <li class="login_infos"><span class="glyphicon glyphicon-ok-circle logged"></span> Logged</li>
+    <li class="login_infos" ><%= session.host +' - '+ session.adminLogin +'/'+session.userLogin %></li>
+    <li><form method="post">
+      <input type="submit" name="logoutbtn" value="Logout" id="btn-logout"/>
+    </form></li>
+  </ul>
+
+<% }else{ %>
+  <ul class="nav navbar-top-links navbar-right">
+    <li class="login_infos"><span class="fa fa-check-circle-o notlogged"></span> Not logged</li>
+  </ul>
+<% } %>

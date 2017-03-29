@@ -1,0 +1,116 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Account generator</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+
+    </div>
+    <!-- /.row -->
+    <div class="row">
+
+
+      <form>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6 form-tab">
+            <!-- ******************* GENERAL SETTINGS ********************* -->
+            <fieldset>
+              <legend>General</legend>
+
+              <div class="form-group">
+                <label for="accountCount">Account Count</label>
+                <input name="count" type="number" class="form-control" id="accountCount" placeholder="Account count" value="10">
+              </div>
+              <div class="form-group">
+                <label for="domainName">Use non-primary domain</label>
+                <div class="input-group" id="domainName">
+                  <span class="input-group-addon">
+                    <input type="checkbox" id="accountDomainCheckbox">
+                  </span>
+                  <input name="domain" type="text" class="form-control" id="domainNameText" placeholder="domain.com" disabled>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="czchar" <%= (query.submit) ? (query.czchar == 'on') ? 'checked' : '' : 'checked' %>> Czech symbols
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" checked disabled> Generate login
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="spass" <%=(query.spass == "on") ? "checked" : ""%>> Strong password
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="fname" <%= (query.submit) ? (query.fname == 'on') ? 'checked' : '' : 'checked' %>> Random fullname
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="desc" <%= (query.submit) ? (query.desc == 'on') ? 'checked' : '' : 'checked' %>> Random description
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </div>  <!-- end column -->
+
+          <div class="col-lg-4 col-md-6 form-tab">
+            <fieldset>
+              <legend>Personal information</legend>
+              Not implemented yet.
+            </fieldset>
+          </div> <!-- end column -->
+
+
+          <div class="col-lg-4 col-md-6 form-tab">
+
+          </div> <!-- end column -->
+
+        </div>
+        <%
+          if(params.error != undefined){
+        %>
+          <div class="error_code">
+            <u>Error</u>: <%= params.error %>
+          </div>
+        <% }else if(params.success != undefined){ %>
+          <div class="success_code">
+            <%= params.success %>
+          </div>
+        <% } %>
+        <hr>
+        <button name="reset" type="submit" class="btn btn-danger" id="btn-resetchanges" >Reset changes</button>
+        <button name="submit" type="submit" class="btn btn-primary" id="btn-submit">Generate Accounts</button>
+      </form>
+
+    </div>
+</div>
+<div class="tab-legends">
+  * Password is <strong>a</strong> or <strong>ABCabc123</strong> if option <strong>Strong password</strong> is checked<br/>
+  * Account will be created in primary domain if the option <strong>Use non-primary domain</strong> is not checked
+</div>
+<!-- /.container-fluid -->

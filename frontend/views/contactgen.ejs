@@ -1,0 +1,219 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Contacts generator</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+
+    </div>
+    <!-- /.row -->
+    <div class="row">
+
+
+      <form method="get">
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6 form-tab">
+            <!-- ******************* GENERAL SETTINGS ********************* -->
+            <fieldset>
+              <legend>General</legend>
+
+              <div class="form-group">
+                <label for="contactCount">Contact Count</label>
+                <input name="count" type="number" class="form-control" id="contactCount" placeholder="Event count" value="100">
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="czchar" <%= (query.submit) ? (query.czchar == 'on') ? 'checked' : '' : 'checked' %>> Czech symbols
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="fname" <%= (query.submit) ? (query.fname == 'on') ? 'checked' : '' : 'checked' %>> First name
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="lname" <%= (query.submit) ? (query.lname == 'on') ? 'checked' : '' : 'checked' %>> Last name
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="mname" <%= (query.submit) ? (query.mname == 'on') ? 'checked' : '' : 'checked' %>> Middle name
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="nname" <%= (query.submit) ? (query.nickname == 'on') ? 'checked' : '' : 'checked' %>> Nickname
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <label for="emailSlider">Email count</label><br/>
+                <input name="emailc" id="emailSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="1"/>
+                <span class="slider-value"><span id="emailSliderValue">3</span> emails</span>
+              </div>
+              <div class="form-group">
+                <label for="phoneSlider">Phone number count</label><br/>
+                <input name="phonec" id="phoneSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="1"/>
+                <span class="slider-value"><span id="phoneSliderValue">3</span> numbers</span>
+              </div>
+
+            </fieldset>
+          </div>  <!-- end column -->
+
+          <div class="col-lg-4 col-md-6 form-tab">
+            <fieldset>
+              <legend>More options</legend>
+
+              <div class="form-group">
+                <label for="avatarSlider">Avatar photo (< 20KB)</label><br/>
+                <input name="avaprob" id="avatarSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="10"/>
+                <span class="slider-value"><span id="avatarSliderValue">0</span>% probability</span><br/>
+                Could takes <span id="avatarSliderSum">0</span> KB
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="web" <%= (query.submit) ? (query.web == 'on') ? 'checked' : '' : 'checked' %>> Random website
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="com" <%= (query.submit) ? (query.com == 'on') ? 'checked' : '' : 'checked' %>> Company
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="job" <%= (query.submit) ? (query.job == 'on') ? 'checked' : '' : 'checked' %>> Job title
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="addressSlider">Address count</label><br/>
+                <input name="add" id="addressSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="3" data-slider-step="1" data-slider-value="1"/>
+                <span class="slider-value"><span id="addressSliderValue">3</span> addresses</span>
+              </div>
+
+          </fieldset>
+            </fieldset>
+
+            </fieldset>
+          </div> <!-- end column -->
+
+
+          <div class="col-lg-4 col-md-6 form-tab">
+            <fieldset>
+              <legend>Notes</legend>
+              <div class="form-group">
+                <label for="contentSlider">Notes size</label><br/>
+                <input name="notes" id="contentSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="5" data-slider-step="1" data-slider-value="3"/>
+                <span class="slider-value"><span id="contentSliderValue">3</span> sentences</span>
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="htmlc" <%= (query.submit) ? (query.htmlc == 'on') ? 'checked' : '' : 'checked' %>> Contains Html codes
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="links" <%= (query.submit) ? (query.links == 'on') ? 'checked' : '' : 'checked' %>> Contains links
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="imadd" <%= (query.submit) ? (query.imadd == 'on') ? 'checked' : '' : 'checked' %>> IM address
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="birth" <%= (query.submit) ? (query.birth == 'on') ? 'checked' : '' : 'checked' %>> Birthday/Anniversary
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="office" <%= (query.submit) ? (query.office == 'on') ? 'checked' : '' : 'checked' %>> Department/Office
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="manag" <%= (query.submit) ? (query.manag == 'on') ? 'checked' : '' : 'checked' %>> Manager/Assistant
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+          </div> <!-- end column -->
+
+        </div>
+        <%
+          if(params.error != undefined){
+        %>
+          <div class="error_code">
+            <u>Error</u>: <%= params.error %>
+          </div>
+        <% }else if(params.success != undefined){ %>
+          <div class="success_code">
+            <%= params.success %>
+          </div>
+        <% } %>
+        <hr>
+        <button name="reset" type="submit" class="btn btn-danger" id="btn-resetchanges">Reset changes</button>
+        <button name="submit" type="submit" class="btn btn-primary" id="btn-submit">Generate Contacts</button>
+      </form>
+
+    </div>
+</div>
+<div class="tab-legends">
+  * <strong>Nickname</strong> and <strong>Middle name</strong> if are enabled will have fixed probability 5%<br/>
+  * It is not recommended to use high probability for <strong>Avatar photo</strong><br/>
+  * <strong>Random checkboxes</strong> - If checkbox is enabled, that property will be filled with radom values
+</div>
+<!-- /.container-fluid -->

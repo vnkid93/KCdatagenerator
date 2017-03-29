@@ -1,0 +1,158 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Emails generator</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+
+    </div>
+    <!-- /.row -->
+    <div class="row">
+
+
+      <form>
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6 form-tab">
+            <!-- ******************* GENERAL SETTINGS ********************* -->
+            <fieldset>
+              <legend>General</legend>
+
+              <div class="form-group">
+                <label for="emailCount">Email Count</label>
+                <input name="count" type="number" class="form-control" id="emailCount" placeholder="Email count" value="100">
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="czchar" <%= (query.submit) ? (query.czchar == 'on') ? 'checked' : '' : 'checked' %>> Czech symbols
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox" >
+                    <label title="Not implemented yet">
+                      <input type="checkbox" name="rconf" disabled> Reading confirmation
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label title="Not implemented yet">
+                      <input type="checkbox" name="dconf" disabled> Delivery notifications
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" title="Not implemented yet">
+                <label for="flagSlider">Flags</label><br/>
+                <input data-slider-enabled="false" name="flag" id="flagSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="2" data-slider-value="0"/>
+                <span class="slider-value"><span id="flagSliderValue">0</span>% probability</span>
+              </div>
+              <div class="form-group">
+              <label for="highPrioritySlider">High priority</label><br/>
+              <input name="prior" id="highPrioritySlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="2" data-slider-value="8"/>
+              <span class="slider-value"><span id="highPrioritySliderValue">8</span>% probability</span>
+            </div>
+            </fieldset>
+          </div>  <!-- end column -->
+
+
+
+          <div class="col-lg-4 col-md-6 form-tab">
+            <fieldset>
+              <legend>Header</legend>
+              <div class="form-group">
+                <label for="recipient">Recipients</label>
+                <input name="recip" type="text" class="form-control" id="recipient" value='<%= (query.recip != undefined && query.recip.length > 0) ? query.recip : session.userLogin %>' placeholder="person1@email.com; person2@email.com; ...">
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="sub" <%= (query.submit) ? (query.sub == 'on') ? 'checked' : '' : 'checked' %>> Contains Subject
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="cc" disabled> Random CC
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="attachmentSlider">Attachement</label><br/>
+                <input name="attach" id="attachmentSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+                <span class="slider-value"><span id="attachmentSliderValue">0</span>% probability</span>
+              </div>
+            </fieldset>
+
+
+
+          </div> <!-- end column -->
+
+          <div class="col-lg-4 col-md-6 form-tab">
+            <fieldset>
+              <legend>Content</legend>
+              <div class="form-group">
+                <label for="contentSlider">Content size</label><br/>
+                <input name="csize" id="contentSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="10" data-slider-step="1" data-slider-value="3"/>
+                <span class="slider-value"><span id="contentSliderValue">3</span> paragraphs</span>
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="htmlc" <%= (query.submit) ? (query.htmlc == 'on') ? 'checked' : '' : 'checked' %>> Contains Html codes
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="links" <%= (query.submit) ? (query.links == 'on') ? 'checked' : '' : 'checked' %>> Contains links
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" title="Not implemented yet">
+                <label for="inlineImgSlider">Inline image</label><br/>
+                <input data-slider-enabled="false" name="inimg" id="inlineImgSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="0"/>
+                <span class="slider-value"><span id="inlineImgSliderValue">0</span>% probability</span>
+              </div>
+            </fieldset>
+          </div>
+
+        </div>
+        <%
+          if(params.error != undefined){
+        %>
+          <div class="error_code">
+            <u>Error</u>: <%= params.error %>
+          </div>
+        <% }else if(params.success != undefined){ %>
+          <div class="success_code">
+            <%= params.success %>
+          </div>
+        <% } %>
+        <hr>
+        <button name="reset" type="submit" class="btn btn-danger" id="btn-resetchanges" value="yes">Reset changes</button>
+        <button name="submit" type="submit" class="btn btn-primary" id="btn-submit" value="yes">Generate Emails</button>
+
+
+      </form>
+
+    </div>
+</div>
+<div class="tab-legends">
+  * Features <strong>Reading/Delivery confirmation</strong> and <strong>Inline image</strong> are still not implemented<br/>
+  * <strong>Recipients</strong> need to be filled. Use character '<strong>;</strong>' to separate those emails.
+</div>
+<!-- /.container-fluid -->

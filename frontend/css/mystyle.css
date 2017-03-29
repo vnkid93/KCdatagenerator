@@ -1,0 +1,107 @@
+.form-tab{
+  padding-left: 15px;
+  padding-right: 20px;
+}
+
+#exSlider .slider-selection {
+	background: #BABABA;
+}
+
+.slider-value{
+  margin-left: 20px;
+}
+
+.slider-value span{
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.tab-legends{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.index_status{
+  text-align: center;
+  font-size: 1.5em;
+}
+
+.index_status .logged{
+  color: green;
+}
+
+.index_status .notlogged{
+  color: orange;
+}
+
+.loggin_status{
+  text-align: center;
+  font-size: 2em;
+}
+
+.loggin_status .logged{
+  color: green;
+}
+
+.loggin_status .notlogged{
+  color: orange;
+}
+
+.error_code{
+  color: red;
+  margin-top: 20px;
+}
+.success_code{
+  color: green;
+  margin-top: 20px;
+}
+
+.login_infos{
+  padding: 15px;
+  color: #777;
+}
+
+.navbar-top-links .logged{
+  color: green;
+}
+
+.navbar-top-links .notlogged{
+  color: orange;
+}
+
+
+#btn-logout{
+  background:none!important;
+  border:none;
+  padding:0!important;
+  font: inherit;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  color: #337ab7;
+}
+
+#btn-logout:hover{
+  text-decoration: underline;
+}
+
+.menu-header{
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  font-size: 1.5em;
+  color: #777;
+}
+
+.required{
+  color:red;
+}
+
+.nav li{
+  font-weight: bold;
+}
+
+.nav li i{
+  width: 20px;
+}

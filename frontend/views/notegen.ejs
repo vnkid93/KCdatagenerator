@@ -1,0 +1,104 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Notes generator</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+
+    </div>
+    <!-- /.row -->
+    <div class="row">
+
+
+      <form action="" method="get">
+
+        <div class="row">
+          <div class="col-lg-4 col-md-6 form-tab">
+            <!-- ******************* GENERAL SETTINGS ********************* -->
+            <fieldset>
+              <legend>General</legend>
+
+              <div class="form-group">
+                <label for="notecount">Note count</label>
+                <input type="number" class="form-control" id="notecount" name="count" placeholder="Note count" value="100">
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="czchar" <%= (query.submit) ? (query.czchar == 'on') ? 'checked' : '' : 'checked' %>> Czech symbols
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="sub" <%= (query.submit) ? (query.sub == 'on') ? 'checked' : '' : 'checked' %>> Random subject
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+            </fieldset>
+          </div>  <!-- end column -->
+
+          <div class="col-lg-4 col-md-6 form-tab">
+            <fieldset>
+              <legend>Content</legend>
+              <div class="form-group">
+                <label for="noteContentSlider">Content size</label><br/>
+                <input name="csize" id="noteContentSlider" data-slider-id='exSlider' type="text" data-slider-min="0" data-slider-max="15" data-slider-step="1" data-slider-value="3" value="3"/>
+                <span class="slider-value"><span id="noteContentSliderValue">3</span> paragraphs</span>
+              </div>
+
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="htmlc" <%= (query.submit) ? (query.htmlc == 'on') ? 'checked' : '' : 'checked' %>> Contains html code
+                    </label>
+                  </div>
+                </div>
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="links" <%= (query.submit) ? (query.links == 'on') ? 'checked' : '' : 'checked' %> > Contains links
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xs-5">
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" name="color" <%= (query.submit) ? (query.color == 'on') ? 'checked' : '' : 'checked' %>> Random color
+                    </label>
+                  </div>
+                </div>
+              </div>
+          </fieldset>
+          </div> <!-- end column -->
+        </div>
+        <%
+          if(params.error != undefined){
+        %>
+          <div class="error_code">
+            <u>Error</u>: <%= params.error %>
+          </div>
+        <% }else if(params.success != undefined){ %>
+          <div class="success_code">
+            <%= params.success %>
+          </div>
+        <% } %>
+        <hr>
+        <button name="reset" type="submit" class="btn btn-danger" id="btn-resetchanges">Reset changes</button>
+        <button name="submit" type="submit" class="btn btn-primary" id="btn-submit">Generate Notes</button>
+      </form>
+    </div>
+</div>
+<div class="tab-legends">
+  * <strong>Random subject</strong> is the first line of the note<br/>
+  * <strong>Random checkboxes</strong> - If checkbox is enabled, that property will be filled with radom values
+</div>
+<!-- /.container-fluid -->
